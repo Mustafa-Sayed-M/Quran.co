@@ -3,7 +3,7 @@ import VerseActions from "./VerseActions";
 
 function VerseCard({ verse = {} }) {
 
-    const { textType, activeWord } = useChapterContext();
+    const { textType, activeWord, search } = useChapterContext();
 
     return (
         <div className="verse-card border-b border-b-gray-300 p-5">
@@ -13,10 +13,12 @@ function VerseCard({ verse = {} }) {
                     {
                         verse.words.map(word => (<span
                             className={`last-of-type:hidden transition${(word.position === activeWord.position) && (word.verse_key === activeWord.verse_key)
-                                ? " text-[#01ac52]" : ""}`}
+                                ? " text-[#01ac52]" : ""} ${word.text_imlaei_simple === search ? "bg-[#01ac52] text-white" : ""}`}
                             key={word.id}
                         >
-                            {word[textType]}
+                            {String(word[textType]).split("").map((wordLetter, index) => (<span key={index} className={`transition ${String(search).includes(wordLetter) && word.text_imlaei_simple !== search ? "text-[#01ac52]" : ""}`}>
+                                {wordLetter}
+                            </span>))}
                         </span>))
                     }
                 </p>

@@ -5,6 +5,7 @@ const ChapterContext = React.createContext();
 
 export const ChapterContextProvider = ({ children }) => {
 
+    const [search, setSearch] = React.useState(null);
     const [chapterId, setChapterId] = React.useState(localStorage.getItem('chapterId') || 1);
     const [reciterId, setReciterId] = React.useState(localStorage.getItem('reciterId') || 1);
     const [translatorId, setTranslatorId] = React.useState(localStorage.getItem('translatorId') || 1);
@@ -22,7 +23,8 @@ export const ChapterContextProvider = ({ children }) => {
             reciterId, setReciterId,
             translatorId, setTranslatorId,
             textType, setTextType,
-            activeWord, setActiveWord
+            activeWord, setActiveWord,
+            search, setSearch
         }}>
             {children}
         </ChapterContext.Provider>

@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 function Chapter() {
 
-    const { chapterId, translatorId, activeWord } = useChapterContext();
+    const { chapterId, translatorId, activeWord, setSearch } = useChapterContext();
     const listRef = useListRef(null);
     const queryClient = useQueryClient();
     const verseChapterCashed = queryClient.getQueryData([`VERSES_CHAPTER_${chapterId}`, chapterId, translatorId]);
@@ -40,6 +40,7 @@ function Chapter() {
         defaultRowHeight: 200
     });
 
+    // Row Component:
     const RowComponent = ({ index, style }) => {
         const verse = data?.verses[index];
         return (
@@ -50,29 +51,48 @@ function Chapter() {
     };
 
     return (
-        <div className="chapter w-full h-full max-h-full bg-white rounded-sm shadow-md overflow-auto">
-            {
-                isLoading ? (
-                    Array.from({ length: 10 }).map((_, index) => (<div className="verse-card-skeleton border-b border-b-gray-300 p-5" key={index}>
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="w-full max-w-[200px] h-5 bg-slate-300 animate-pulse rounded-sm"></div>
-                            <div className="w-7 h-5 bg-slate-300 animate-pulse rounded-sm"></div>
-                        </div>
-                        <div className="w-20 h-5 bg-slate-300 animate-pulse rounded-sm mb-5"></div>
-                        <div className="flex items-center gap-2 justify-end">
-                            <div className="w-7 h-7 bg-slate-300 animate-pulse rounded-full"></div>
-                            <div className="w-7 h-7 bg-slate-300 animate-pulse rounded-full"></div>
-                            <div className="w-7 h-7 bg-slate-300 animate-pulse rounded-full"></div>
-                        </div>
-                    </div>))
-                ) : (<List
-                    rowComponent={RowComponent}
-                    rowCount={data?.verses.length}
-                    rowHeight={rowHeight}
-                    rowProps={{ verses: data?.verses }}
-                    listRef={listRef}
-                />)
-            }
+        <div className="chapter w-full h-full flex flex-col">
+            {/* Chapter Search */}
+            <div className="chapter-search">
+                <input
+                    name="search"
+                    placeholder="ابحث..."
+                    onChange={e => {
+                        const value = e.target.value.trim();
+                        if (value) {
+                            setSearch(value);
+                        } else {
+                            setSearch(null)
+                        }
+                    }}
+                    className="w-full p-3 bg-white caret-[#01ac52] rounded-sm sm:shadow-md border-b border-b-gray-300 sm:border-b-transparent sm:mb-3 lg:mb-5"
+                />
+            </div>
+            {/* Chapter List */}
+            <div className="chapter-list h-full max-h-full overflow-auto bg-white rounded-sm sm:shadow-md">
+                {
+                    isLoading ? (
+                        Array.from({ length: 10 }).map((_, index) => (<div className="verse-card-skeleton border-b border-b-gray-300 p-5" key={index}>
+                            <div className="flex items-center justify-between mb-2">
+                                <div className="w-full max-w-[200px] h-5 bg-slate-300 animate-pulse rounded-sm"></div>
+                                <div className="w-7 h-5 bg-slate-300 animate-pulse rounded-sm"></div>
+                            </div>
+                            <div className="w-20 h-5 bg-slate-300 animate-pulse rounded-sm mb-5"></div>
+                            <div className="flex items-center gap-2 justify-end">
+                                <div className="w-7 h-7 bg-slate-300 animate-pulse rounded-full"></div>
+                                <div className="w-7 h-7 bg-slate-300 animate-pulse rounded-full"></div>
+                                <div className="w-7 h-7 bg-slate-300 animate-pulse rounded-full"></div>
+                            </div>
+                        </div>))
+                    ) : (<List
+                        rowComponent={RowComponent}
+                        rowCount={data?.verses.length}
+                        rowHeight={rowHeight}
+                        rowProps={{ verses: data?.verses }}
+                        listRef={listRef}
+                    />)
+                }
+            </div>
         </div>
     );
 }
