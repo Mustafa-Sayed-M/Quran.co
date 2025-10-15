@@ -17,7 +17,7 @@ function MainLayout() {
             const navbarHeight = navbarRef.current?.offsetHeight || 0;
             const playerHeight = playerRef.current?.offsetHeight || 0;
             const total = navbarHeight + playerHeight;
-            setMainHeight(`calc(100vh - ${total}px)`);
+            setMainHeight(`calc(100dvh - ${total}px)`);
         };
 
         updateHeight();
