@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@utility container {
+    margin-inline: auto;
+    padding-inline: 2rem;
+}
+
+/* Global */
+html,
+body {
+    overflow-x: hidden;
+}
+
+button:focus,
+input:focus,
+textarea:focus {
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+.disable-transitions * {
+    transition: none !important;
+}
