@@ -22,7 +22,7 @@ function VerseCard({ verse = {} }) {
                         </span>))
                     }
                 </p>
-                <div className="text-[#01ac52] text-lg font-medium">{verse.verse_key}</div>
+                <div className="text-[#017a3f] text-lg font-medium">{verse.verse_key}</div>
             </div>
             {/* Actions */}
             <VerseActions verse={verse} />
