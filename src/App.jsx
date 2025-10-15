@@ -3,13 +3,11 @@ import useStopAllTransition from "@hooks/useStopAllTransition";
 
 // ## Pages:
 import HomePage from "@pages/HomePage";
+import BookmarkPage from "@pages/BookmarkPage";
 import NotFoundPage from "@pages/NotFoundPage";
-// ## Components:
-import Footer from "@components/layout/Footer";
 // ## Layouts:
 import MainLayout from "@layouts/MainLayout";
 import AuthLayout from "@layouts/AuthLayout";
-import BookmarkPage from "@pages/BookmarkPage";
 
 function App() {
 
@@ -40,8 +38,6 @@ function App() {
         {/* Not Found */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      {/* Footer */}
-      {/* <Footer /> */}
     </div>
   )
 }

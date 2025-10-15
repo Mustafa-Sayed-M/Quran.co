@@ -4,6 +4,7 @@ import { GET_AUDIO_FILE_OF_CHAPTER } from "@utils/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import TimeDisplay from "./components/TimeDisplay";
 import Controllers from "./components/Controllers";
+import ProgressBar from "./components/ProgressBar";
 
 function AudioPlayer({ ref }) {
 
@@ -26,21 +27,19 @@ function AudioPlayer({ ref }) {
     const [currentTime, setCurrentTime] = useState(localStorage.getItem('currentTime') || 0);
     const [timestamps, setTimestamps] = useState([]);
 
-    useEffect(() => {
-        if (data && !isLoading) {
-            setTimestamps(data.audio_file.timestamps);
-        }
-    }, [data, isLoading]);
-
-    // Handle Stored Current Time:
-    useEffect(() => {
+    useEffect(() => { // Handle Stored Current Time
+        if (!audioRef.current) return;
         const storedCurrentTime = localStorage.getItem('currentTime');
         if (storedCurrentTime) {
             audioRef.current.currentTime = storedCurrentTime;
         }
     }, []);
-    // Handle Play Audio:
-    useEffect(() => {
+    useEffect(() => { // Handle Timestamp
+        if (data && !isLoading) {
+            setTimestamps(data.audio_file.timestamps);
+        }
+    }, [data, isLoading]);
+    useEffect(() => { // Handle Play Audio
         const audio = audioRef.current;
 
         if (audio && data && !isLoading) {
@@ -81,7 +80,6 @@ function AudioPlayer({ ref }) {
                 }
                 return { verse_key: verse.verse_key, position };
             });
-
         }
     }, [timestamps, setActiveWord]);
     const onLoadedMetadataHandler = useCallback((e) => {
@@ -94,17 +92,27 @@ function AudioPlayer({ ref }) {
         setCurrentTime(current);
         getActiveWordHandler(currentMs);
     }, [getActiveWordHandler]);
+    const rangeChangeHandler = useCallback((e) => {
+        audioRef.current.currentTime = e.target.value;
+    }, []);
 
     return (
-        <div ref={ref} className="audio-player bg-slate-800 text-white py-3 sm:py-5">
+        <div ref={ref} className="audio-player bg-slate-800 text-white py-3 sm:py-5 relative">
 
             <audio
                 ref={audioRef}
                 className="hidden"
                 onEnded={onEndedHandler}
+                onTimeUpdate={onTimeUpdateHandler}
                 src={data && data?.audio_file?.audio_url}
                 onLoadedMetadata={onLoadedMetadataHandler}
-                onTimeUpdate={onTimeUpdateHandler}
+            />
+
+            {/* Progress Bar */}
+            <ProgressBar
+                duration={duration}
+                currentTime={currentTime}
+                rangeChangeHandler={rangeChangeHandler}
             />
 
             <div className="container flex sm:items-center flex-wrap justify-between gap-3">
